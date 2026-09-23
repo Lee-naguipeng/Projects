@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tradingPartners>
+	<!-- a and b test normal extend -->
+	<mqConf>
+		<name>a</name>
+		<host>wwdyzmqt.boulder.ibm.com</host>
+		<port>1414</port>
+		<account>tester</account>
+		<password>pwd</password>
+		<qm>qma</qm>
+		<q>qa</q>
+	</mqConf>
+
+	<mqConf>
+		<name>b</name>
+		<extend>a</extend>
+		<port>1415</port>
+		<qm>qmb</qm>
+		<q>qb</q>
+	</mqConf>
+	
+	<!-- a , b and c test multiple extend -->
+	<mqConf>
+		<name>c</name>
+		<extend>b</extend>
+		<qm>qmc</qm>
+	</mqConf>
+	
+	<!-- d , e and f test dead loop extend-->
+	<!-- 
+	<mqConf>
+		<name>d</name>
+		<extend>f</extend>
+	</mqConf>
+	<mqConf>
+		<name>e</name>
+		<extend>d</extend>
+	</mqConf>
+	<mqConf>
+		<name>f</name>
+		<extend>e</extend>
+	</mqConf>
+	-->
+	
+	<!-- d test no parent bean, which is a kind of error -->
+	<!-- 
+	<mqConf>
+		<name>d</name>
+		<extend>f</extend>
+	</mqConf>
+	-->
+	 
+	<!-- test extend in errorMsg segment -->
+	<errorMsg>
+		<isSendMQ>Y</isSendMQ>
+		<mqConf>
+			<name>errA</name>
+			<extend>a</extend>
+			<channel>testChannel</channel>
+			<q>testQueue</q>
+		</mqConf>
+	</errorMsg>
+	 
+	<!-- test extend in aliveMsg segment -->
+	<aliveMsg>
+		<isSendMQ>Y</isSendMQ>
+		<mqConf>
+			<name>aliveA</name>
+			<extend>b</extend>
+			<channel>testChannel</channel>
+			<q>testQueue</q>
+		</mqConf>
+	</aliveMsg>
+	
+	<!-- test extend in TradingPartner segment -->
+	<tradingPartner>
+		<name>test</name>
+		<mqConf>
+			<name>testA</name>
+			<extend>a</extend>
+			<qm>testAQm</qm>
+			<q>testAQ</q>
+		</mqConf>
+		<mqConf>
+			<name>testB</name>
+			<extend>testA</extend>
+			<q>testBQ</q>
+		</mqConf>
+		<mqConf>
+			<name>testC</name>
+			<extend>a</extend>
+			<q>testCQ</q>
+		</mqConf>
+		<interface>
+			<name>genericIn</name>
+			<type>file2mq</type>
+			<mqConf>
+				<name>ga</name>
+				<extend>b</extend>
+				<qm>gaqm</qm>
+				<q>gaq</q>
+			</mqConf>
+			<mqConf>
+				<name>gb</name>
+				<extend>ga</extend>
+				<q>gbq</q>
+			</mqConf>
+		</interface>
+	</tradingPartner>
+</tradingPartners>

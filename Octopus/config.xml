@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tradingPartners>
+	<name>stub</name>
+
+	<mqConf>
+		<name>yzmqt</name>
+		<!-- <host>wwdyzmqt.boulder.ibm.com</host> -->
+		<host>localhost</host>
+		<port>1414</port>
+		<channel>WWDYZMQT.CLIENT</channel>
+		<account>mqopt</account>
+		<password>pwd</password>
+		<qm>WWDYZMQT</qm>
+	</mqConf>
+
+	<isSendError>Y</isSendError>
+	<errorMsg>
+		<isSendMQ>Y</isSendMQ>
+		<mqConf>
+			<name>errMsgQ</name>
+			<extend>yzmqt</extend>
+			<q>JAVA.MESSAGE.QR</q>
+		</mqConf>
+	</errorMsg>
+	<isSendAlive>Y</isSendAlive>
+	<aliveMsg>
+		<isSendMQ>Y</isSendMQ>
+		<mqConf>
+			<name>aliveMsgQ</name>
+			<extend>yzmqt</extend>
+			<q>JAVA.MESSAGE.QR</q>
+		</mqConf>
+	</aliveMsg>
+	<runFlag>Y</runFlag>
+	<sleepTime>5</sleepTime>
+	<workDir>/wwdftp/newJava</workDir>
+	<tradingPartner>
+		<name>alexandr</name>
+		<runFlag>Y</runFlag>
+		<className>com.ibm.dsg.cr20050098.CommonTP</className>
+		<mqConf>
+			<name>in</name>
+			<extend>yzmqt</extend>
+			<!-- <q>QL.IMB.TO.YZ.I.01</q> -->
+			<q>QR.INBOUND.EDI.DOC.O.01</q>
+		</mqConf>
+		<mqConf>
+			<name>out</name>
+			<extend>yzmqt</extend>
+			<q>QL.IMB.TO.YZ.I.01</q>
+		</mqConf>
+		<interface>
+			<name>genericIn1</name>
+			<transferClass>com.ibm.dsg.cr20050098.interfaces.File2Ftp</transferClass>
+			<limitedSize>10485760</limitedSize>
+			<ftp>
+				<sslEnabled>N</sslEnabled>
+				<host>wwds1</host>
+				<port>21</port>
+				<account>ftpuser</account>
+				<password>password</password>
+				<dstDir>remoteDir</dstDir>
+				<dstFileName>remoteFileName</dstFileName>
+			</ftp>
+			<bundleMsgs>N</bundleMsgs>
+			<file>
+				<name>in</name>
+				<dir>/wwdftp/DSGJava/alexandr/in</dir>
+				<archiveDir>/wwdftp/DSGJava/archive/alexandr/in</archiveDir>
+			</file>
+		</interface>
+		
+		<interface>
+			<name>genericIn2</name>
+			<transferClass>com.ibm.dsg.cr20050098.interfaces.File2MQ</transferClass>
+			<limitedSize>10485760</limitedSize>
+			<bundleMsgs>N</bundleMsgs>
+			<file>
+				<name>in</name>
+				<dir>/wwdftp/DSGJava/alexandr/in</dir>
+				<archiveDir>/wwdftp/DSGJava/archive/alexandr/in</archiveDir>
+			</file>
+			<mqConf>
+				<name>inConf</name>
+				<extend>in</extend>
+			</mqConf>
+		</interface>
+		
+		<interface>
+			<name>824</name>
+			<dataType>AnsiX12</dataType>
+			<contentType>824</contentType>
+			<transferClass>com.ibm.dsg.cr20050098.interfaces.MQ2File</transferClass>
+			<bundleValue>AXNI,824</bundleValue>
+			<file>
+				<name>out</name>
+				<dir>/wwdftp/alexandr/out</dir>
+				<archiveDir>/wwdftp/newJava/archive/alexandr/out</archiveDir>
+				<prefixFileName>alexandr</prefixFileName>
+				<suffixFileName>log</suffixFileName>
+			</file>
+			<mqConf>
+				<name>outMq</name>
+				<extend>out</extend>
+			</mqConf>
+		</interface>
+		
+		<interface>
+			<name>997</name>
+			<dataType>AnsiX12</dataType>
+			<contentType>997</contentType>
+			<transferClass>com.ibm.dsg.cr20050098.interfaces.MQ2File</transferClass>
+			<bundleValue>AXNI,997</bundleValue>
+			<filter>
+				<name>replace LF</name>
+				<filterClass>com.ibm.dsg.cr20050098.filters.Replace</filterClass>
+				<privateConfig>
+					<original>10,13</original>
+					<replacement>9,10</replacement>
+				</privateConfig>
+			</filter>
+			
+			<filter>
+				<name>trim</name>
+				<filterClass>com.ibm.dsg.cr20050098.filters.Trim</filterClass>
+				<privateConfig>
+					<aaa>
+						<xxx>
+							<yyy>sss</yyy>
+						</xxx>
+						<bcd>bbb</bcd>
+						<xyz>ccc</xyz>
+					</aaa>
+					<trimNumber>10</trimNumber>
+				</privateConfig>
+			</filter>
+			
+			<filter>
+				<name>fixlength</name>
+				<filterClass>com.ibm.dsg.cr20050098.filters.FixLength</filterClass>
+				<privateConfig>81</privateConfig>
+			</filter>
+			
+			<file>
+				<name>out</name>
+				<dir>/wwdftp/alexandr/out</dir>
+				<archiveDir>/wwdftp/newJava/archive/alexandr/out</archiveDir>
+				<prefixFileName>alexandr</prefixFileName>
+				<suffixFileName>log</suffixFileName>
+			</file>
+			<mqConf>
+				<name>outMq</name>
+				<extend>Out</extend>
+			</mqConf>
+		</interface>
+	</tradingPartner>
+	
+	<controller>
+		<name>controllAll</name>
+		<runFlag>Y</runFlag>
+		<isAllTP>Y</isAllTP>
+		<sleepTime>600</sleepTime>
+	</controller>
+</tradingPartners>

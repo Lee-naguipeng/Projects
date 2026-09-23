@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Example and explaination of config file for CR20050098 program.
+Created by ivy@cn.ibm.com at 2005-08-21.
+-->
+<tradingPartners>
+	<!--  
+	The name of this thread.
+	-->
+	<name>stub</name>
+	
+	<!-- 
+	Dedicates whether or not send error messages. 
+	optional values is Y and N, and Y means send error 
+	message and N means donot send error message. 
+	-->
+	<isSendError>Y</isSendError>
+	<!-- 
+	The configuration of error message. The subelements can be :
+	isSendmail, emailConf, isSendMQ, mqConf.
+	-->
+	<errorMsg>
+		<!-- Till now, there can be only one emailConf and mqConf segment at most. -->
+		<!-- 
+		Dedicates whethor or not send e_mail messages.
+		There can be one and only one 'isSendMail'.
+		optional values is Y and N, and Y means send mail,
+		N means not send mail. If this field is not defined,
+		system will use the default value 'Y'.
+		 -->
+		<isSendMail>Y</isSendMail>
+		<!-- 
+		The email configuration. The subelements can be
+		one or more 'receiver'.
+		-->
+		<emailConf>
+			<!-- 
+			The email address(es) of whom will be informed.
+			There can be one or more email addresses, and 
+			the format should be normal mail format.
+			-->
+			<receiver>test@dsg.ibm.com</receiver>
+			<receiver>test@cn.ibm.com</receiver>
+		</emailConf>
+		
+		<!-- 
+		Dedicates whethor or not send MQ messages.
+		There can be one and only one 'isSendMQ'.
+		optional values is Y and N, and Y means send MQ message,
+		N means not send MQ message. If this field is not defined,
+		system will use the default value 'Y'.
+		-->
+		<isSendMQ>Y</isSendMQ>
+		<!-- 
+		The MQ configuration. The subelements can be :
+		host, port, account, password, channel, q.
+		-->
+		<mqConf>
+			<!--  
+			The host name or ip address of the mq server.
+			If 'isSendMQ' set to 'Y', then you must spicify
+			the host name.
+			-->
+			<host>mq.boulder.ibm.com</host>
+			<!-- 
+			The qm listener port. It's a optional element;
+			if not spicified, system will use default value 1414.
+			-->
+			<port>1414</port>
+			<!--  
+			UserID used while create MQ connection.
+			If 'isSendMQ' set to 'Y', then you must spicify
+			the 'account'.
+			-->
+			<account>tester</account>
+			<!--  
+			Password used while create MQ connection.
+			If password not spicified, system will use empty string
+			as the password.
+			-->
+			<password>pwd</password>
+			<!--  
+			Queue manager.If 'isSendMQ' set to 'Y', then you 
+			must spicify the 'qm'.
+			-->
+			<qm>qManager</qm>
+			<!-- 
+			Channel.If 'isSendMQ' set to 'Y', then you 
+			must spicify the 'channel'.
+			-->
+			<channel>testChannel</channel>
+			<!-- 
+			The name of the queue. If 'isSendMQ' set to 'Y', 
+			then you must spicify the 'q'.
+			-->
+			<q>testQueue</q>
+		</mqConf>
+	</errorMsg>
+	
+	<!-- 
+	Dedicates whether or not send alive messages. 
+	optional values is Y and N, and Y means send alive
+	message and N means donot send alive message. 
+	-->
+	<isSendAlive>Y</isSendAlive>
+	<!--
+	The optional subelements just like configure of 'errorMsg'. 
+	-->
+	<aliveMsg>
+		<isSendMail>Y</isSendMail>
+		<emailConf>
+			<receiver>test@dsg.ibm.com</receiver>
+			<receiver>test@cn.ibm.com</receiver>
+		</emailConf>
+		
+		<isSendMQ>Y</isSendMQ>
+		<mqConf>
+			<host>mq.boulder.ibm.com</host>
+			<port>1414</port>
+			<account>tester</account>
+			<password>pwd</password>
+			<qm>qManager</qm>
+			<channel>testChannel</channel>
+			<q>testQueue</q>
+		</mqConf>
+	</aliveMsg>
+	
+	<!--
+	The parameter for the old program. It has been replaced by 'logLevel'.
+	The optional values is 'Y' and 'N'.
+	-->
+	<appTraceFlag>N</appTraceFlag>
+	
+	<!--  
+	Dedicates whether or not trace the MQ program.
+	The optional values is 'Y' and 'N'. 'Y' means 
+	trace steps of MQ operation	and 'N' means do 
+	not trace. If not spicified, system will use the
+	default value 'N'.
+	-->
+	<mqTraceFlag>N</mqTraceFlag>
+	
+	<!-- 
+	The RunType paramether shows current running environment.
+	It's the needs of keep the compatible with old program. 
+	-->
+	<runType>some string</runType>
+	
+	<!-- 
+	LogFileRetention defines the number of retention log files.
+	Here should be an integer. 
+	The new log system will keep all the log files, not clean them
+	up by program itself. But use some other crond driven script do
+	this work.
+	-->
+	<logRetention>0</logRetention>
+	
+	<!--  
+	The log file directory, all the log files of the Stub thread will
+	stored here. If not defined, system will use the default value :
+	$workDir/log; if not spicified 'workDir' then all log will output 
+	to the console. We recommand set log dir to a seperated partition,
+	for the reason of while log files occupy all space other program 
+	can still work normally.
+	-->
+	<logDir>O:\\workspace\\cr20050098\\tmp\\log</logDir>
+	
+	<!-- 
+	Dedicats whether or not program should run or should stop. As the 
+	program will refresh this config file automaticlly while this file
+	changed, you can change is to 'N' to stop the whole program.
+	The optional values are 'Y' and 'N'. And 'N' means stop the program.
+	This field must be spicified.
+	-->
+	<runFlag>Y</runFlag>
+	
+	<!--  
+	The stub thread log level. There are five log level according to log4j
+	API : debug, info, warn, error, fatal. The optional values is number 0
+	to 4. 0 means debug level; 1 means info level; 2 means warn level; 3 means
+	error level and 4 means fatal level. 
+    If it is not spicified, system will use the default value 0 and this 
+    will cause lots of log message was output. So we recommand set this value.
+    While on test, we can set it to 0 to see all message that used to trace
+    the process; while on product, we can set it to 1 then only the main steps
+    and errors will be output, then maybe some other scripts will execute these
+    files for error checking or performance analysing.
+	-->
+	<logLevel>0</logLevel>
+	
+	<!-- 
+	How many seconds should stub thread sleep between each round.
+	If not spicify this value, system will used the default value 30.
+	-->
+	<sleepTime>5</sleepTime>
+	
+	<!-- 
+	The workDir is the root directory of the whole program.
+	Typically, it should contains some other subdirectorys. Including
+	bin, lib, conf, log, backup, tmp.
+	It should be the absolute path which starts with '/' on unix
+	platform. This field must be spicified.
+	-->
+	<workDir>O:\\workspace\\cr20050098\\tmp</workDir>
+	
+	<!--  
+	This dir contains the backup files. After input files have been
+	executed, they should be backup to here for some days. Then when error
+	occurs, we can re-execute these files.
+	If not spicified, system will use the default dir, $workDir/backup.
+	But we recommand if it's necessary to backup some input files, you should
+	use a seperated partition.
+	-->
+	<backupDir>O:\\dsg\\backup</backupDir>
+	
+	<!--  
+	This dir contains the tmp files. If some TP process will use some tempary
+	dir to contains some middel-execute files, it can use this dir.
+	If not spicified, system will use the default dir, $workDir/tmp.
+	But we recommand if it's necessary to use a tempary dir, you should
+	use a seperated partition.
+	-->
+	<tmpDir>O:\\dsg\\tmp</tmpDir>
+	
+	<!--  
+	TradingPartner is the object which do the actural buiness logic works.
+	TradingPartner can be run in two mode, one is standAlone, the other
+	is none-standAlone. While run in standAlone mode, it is called up by stub once,
+	then control its own life including sleep, do business work. While run
+	in none-standAlone mode, it will callup by its controller and after 
+	finished the business work it will stop.
+	Which mode should be used, it's depand on the heavy degree of TP.
+	If there are lots of income message to be execute, and the tp thread should be
+	called up frequently, then the TP should run in standAlone mode. Other wise,
+	TP should run in none-standAlone mode.
+	You can find the balance point of your system by adjusting the concurence threads.
+	The concurrence thread number equals standAlone TP numbers plus controller numbers.
+	There can be serval 'tradingPartner' defination segmeng, and the 'name' of each 
+	'tradingPartner' should be unique.
+	-->
+	<tradingPartner>
+		<!-- TP's name cannot be empty	-->
+		<name>tpa</name>
+		<!--  
+		Most time, TP has no need to spicify the 'errorMsg' segment 
+		and 'aliveMsg' segment. These two segments are usful while 
+		testing.
+		-->
+		<isSendError>Y</isSendError>
+		<errorMsg>
+			<isSendMail>Y</isSendMail>
+			<emailConf>
+				<receiver>test@dsg.ibm.com</receiver>
+				<receiver>test@cn.ibm.com</receiver>
+			</emailConf>
+			<isSendMQ>Y</isSendMQ>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</errorMsg>
+		<isSendAlive>Y</isSendAlive>
+		<aliveMsg>
+			<isSendMail>Y</isSendMail>
+			<emailConf>
+				<receiver>test@dsg.ibm.com</receiver>
+				<receiver>test@cn.ibm.com</receiver>
+			</emailConf>
+			<isSendMQ>Y</isSendMQ>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</aliveMsg>
+		<!-- 
+		Is no need to spicify logDir for common TP.
+		If spicified, system will use this dir contains this TP's log file.
+		Otherwise, system will use the common dir : $workDir/log/$tpName/.
+		-->
+		<logDir>O:\\workspace\\cr20050098\\tmp\\log</logDir>
+		<!-- 
+		If you want stop only this TP thread, you can toggle it to N.
+		-->
+		<runFlag>Y</runFlag>
+		<logLevel>0</logLevel>
+		<sleepTime>30</sleepTime>
+		<!-- 
+		Defined the run mode, standAlone or not. And 'Y' means run in standAlone
+		mode, 'N' means none-standAlone mode. And the options are only 'Y' and 'N'.
+		Default value is 'N'.
+		-->
+		<isStandAlone>N</isStandAlone>
+		<!--  
+		'className' is the TP's class's name. This field cannot be empty.
+		The class spicified here should be a subclass of CommmonTP.
+		-->
+		<className>com.ibm.dsg.cr20050098.CommonTP</className>
+		<!--  
+		If you want it be controlled by a controller, then you should spicified
+		the controller name here. And the name should be one of the defined name
+		in 'controller' segment. 
+		If you have spcified 'isStandAlone' to 'Y' which means this TP will run 
+		in standAlone mode, then this field will be ignored.
+		-->
+		<controllerName>ca</controllerName>
+		
+		<!--  
+		Inbound configuration. There are three options of inbound method,
+		one is directory, the other is ftp and the last one is mq.
+		You can spicify the segment that the TP used.
+		-->
+		<in>
+			<dir>inputFileDir</dir>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</in>
+		<!--  
+		Outbound configuration. There are three options of inbound method,
+		one is directory, the other is ftp and the last one is mq.
+		You can spicify the segment that the TP used.
+		-->
+		<out>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+			<ftp>
+				<host>a.b.c</host>
+				<port>21</port>
+				<account>ftpuser</account>
+				<password>password</password>
+				<dstDir>remoteDir</dstDir>
+				<dstFileName>remoteFileName</dstFileName>
+			</ftp>
+		</out>
+	</tradingPartner>
+	
+	<!-- Here should be some commonts about this TP -->
+	<tradingPartner>
+		<name>tpb</name>
+		<runFlag>Y</runFlag>
+		<isStandAlone>Y</isStandAlone>
+		<!--  
+		If a TP runs in standAlone mode, then you can spcify the process type,
+		one of IN, OUT, ALL. It decides which method will be called by TP run
+		method. If not spicified or spell erorr, system will use the default 
+		value ALL.
+		The value is not case sensitive.
+		-->
+		<processType>OUT</processType>
+		<className>com.ibm.dsg.cr20050098.CommonTP</className>
+		<controllerName>ca</controllerName>
+		<in>
+			<ftp>
+				<host>a.b.c</host>
+				<port>21</port>
+				<account>ftpuser</account>
+				<password>password</password>
+				<dstDir>remoteDir</dstDir>
+				<dstFileName>remoteFileName</dstFileName>
+			</ftp>
+		</in>
+		<out>
+			<ftp>
+				<host>a.b.c</host>
+				<port>21</port>
+				<account>ftpuser</account>
+				<password>password</password>
+				<dstDir>remoteDir</dstDir>
+				<dstFileName>remoteFileName</dstFileName>
+			</ftp>
+		</out>
+	</tradingPartner>
+	
+	<!-- Here should be some commonts about this TP -->
+	<tradingPartner>
+		<name>tpc</name>
+		<runFlag>Y</runFlag>
+		<isStandAlone>N</isStandAlone>
+		<className>com.ibm.dsg.cr20050098.CommonTP</className>
+		<controllerName>cb</controllerName>
+		<in>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</in>
+		<out>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</out>
+	</tradingPartner>
+	
+	<!-- Here should be some commonts about this TP -->
+	<tradingPartner>
+		<name>tpd</name>
+		<privateConfigFileName>tpdConfig.xml</privateConfigFileName>
+		<runFlag>Y</runFlag>
+		<isStandAlone>Y</isStandAlone>
+		<className>com.ibm.dsg.cr20050098.CommonTP</className>
+		<controllerName>cb</controllerName>
+		<in>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</in>
+		<out>
+			<mqConf>
+				<host>mq.boulder.ibm.com</host>
+				<port>1414</port>
+				<account>tester</account>
+				<password>pwd</password>
+				<qm>qManager</qm>
+				<channel>testChannel</channel>
+				<q>testQueue</q>
+			</mqConf>
+		</out>
+	</tradingPartner>
+	
+	<!--  
+	Controller is a container of TPs. The TPs contained in controller 
+	will called one by one by controller to do the spicified jobs. 
+	Controller is used for the none-standAlone TPs.
+	-->
+	<controller>
+		<!-- 
+		Here can also spcify 'isSendError', 'errorMsg',
+		'isSendAlive', 'aliveMsg', 'appTraceFlag', 'mqTraceFlag',
+		'runType', 'logRetention', 'logDir', 'logLevel'.
+		-->
+		
+		<!--  
+		Controller's name should be unique.
+		-->
+		<name>ca</name>
+		<logDir>O:\\log</logDir>
+		<!--  
+		you can toggle it to 'N' to stop this controller
+		-->
+		<runFlag>Y</runFlag>
+		<!--  
+		This field is a little important. If it is 'Y', 
+		then all the TPs will be called	whether them 
+		spicify the 'controllerName' or not. This field
+		is designed for extreme status : all the TPs are 
+		run in none-standAlone mode.
+		There are two options, 'Y' and 'N'.
+		If you want to call all TPs one by one, then you 
+		will set it to 'Y', otherwise set to 'N'.
+		-->
+		<isAllTP>Y</isAllTP>
+		<!--  
+		This field dedicates which method in TP should be 
+		called by controller. The options are : 'IN', 'OUT'
+		and 'ALL'. 'IN' means controller will do the TP's 
+		inbound process, and 'OUT' means controller will do
+		the TP's outbound process, and 'ALL' means controller
+		will do inbound process then do outbound process.
+		-->
+		<processType>IN</processType>
+		<sleepTime>2</sleepTime>
+	</controller>
+
+	<!--  
+	Here we defined a 'isAllTP' controller for 'IN',
+	and we also deined a 'isAllTP' controller for 'OUT'
+	this will cover all TPs.
+	If you spicify a TP controlled by a controller,
+	then you'd better not config it to standAlone
+	mode. There some stratagems for avoid conflict,
+	but it's still ensure there is no conflict.
+	In fact, each controller will create a instance for each
+	of its TP. And standAlone TP will also create a
+	instance of its own.
+	-->	
+	<controller>
+		<name>cb</name>
+		<runFlag>Y</runFlag>
+		<isAllTP>Y</isAllTP>
+		<processType>OUT</processType>
+		<sleepTime>3</sleepTime>
+	</controller>
+</tradingPartners>
